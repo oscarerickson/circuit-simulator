@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Circuit Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        #circuitCanvas {
+            border: 1px solid #ccc;
+            width: 600px;
+            height: 400px;
+            position: relative;
+        }
+        .component {
+            position: absolute;
+            cursor: pointer;
+        }
+        #info {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Basic Circuit Simulator</h1>
+    <div id="circuitCanvas"></div>
+    <div id="info">Click on the canvas to place a resistor. Right-click to calculate total resistance.</div>
+    <script>
+        const circuitCanvas = document.getElementById('circuitCanvas');
+        const components = [];
+
+        // Function to place a component
+        circuitCanvas.addEventListener('click', function(event) {
+            const rect = circuitCanvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const resistor = document.createElement('div');
+            resistor.classList.add('component');
+            resistor.style.width = '50px';
+            resistor.style.height = '20px';
+            resistor.style.backgroundColor = 'brown';
+            resistor.style.left = `${x}px`;
+            resistor.style.top = `${y}px`;
+            resistor.textContent = 'R';
+            resistor.draggable = true;
+
+            components.push({ resistance: Math.floor(Math.random() * 100) + 1, element: resistor });
+            circuitCanvas.appendChild(resistor);
+        });
+
+        // Function to calculate total resistance
+        circuitCanvas.addEventListener('contextmenu', function(event) {
+            event.preventDefault();
+            const totalResistance = components.reduce((sum, component) => sum + component.resistance, 0);
+            alert(`Total Resistance: ${totalResistance} Ohms`);
+        });
+    </script>
+</body>
+</html>
